@@ -1,13 +1,37 @@
 ![logo_ironhack_blue 7](https://user-images.githubusercontent.com/23629340/40541063-a07a0a8a-601a-11e8-91b5-2f13e4e6b441.png)
 
-# Basic Auth
+# Mongoose Movies
 
+
+
+## This Lab is separte in two parts (Server & Cliente)
 
 ## Introduction
+As a summary of out basic CRUD journey, we will work on creating the app for movies and celebrities.
+The goal of this exercise is to practice *CRUD* on at least one of the models (building the full CRUD for the *movie model* is mandatory) and *documents relationships* (between the two models), just like we did in out *library-project*.
+So let's see what are some user stories related to the *celebrity* model:
 
-In this exercise, we are going to create a project where we will have all the basic authorization and authentication processes and features that you would in a real application.
+- The user should be able to:
 
-![](https://s3-eu-west-1.amazonaws.com/ih-materials/uploads/upload_044a7b23c9b4cf082e1c4fadcd12d308.png)
+**1. Add new celebrities**\
+**2. See the list of celebrities**
+
+**BONUS** for celebrities model:
+- See the details of a specific celebrity
+- Update existing celebrities
+- Delete celebrities
+
+**Please come back to the bonus part when you finish the full CRUD on *movie* model.**
+
+In the second part of the application, when you already have a couple of celebrities in your database, let's figure out what we will do regarding *movie* model. As we said, we will have a full CRUD on this model, which means the user can:
+
+**6. Add new movies**\
+**7. See the list of all movies**\
+**8. See the details of a specific movie**\
+**9. Update existing movies**\
+**10. Delete movies**
+
+Now when we know the overview of the app, let's proceed to creating it.
 
 
 ## Requirements
@@ -15,94 +39,240 @@ In this exercise, we are going to create a project where we will have all the ba
 - Fork this repo
 - Clone this repo
 
+
 ## Submission
 
 - Upon completion, run the following commands:
 
-  ```
-  git add .
-  git commit -m "done"
-  git push origin master
-  ```
-
+```
+$ git add .
+$ git commit -m "done"
+$ git push origin master
+```
 - Create Pull Request so your TAs can check up your work.
 
 
-## Instructions
+## Instructions Server
 
 ### Iteration 0 | Initialize the project
 
-After forking and cloning the project, you will have to add a `starter_code/.env` file:
+After forking and cloning the project, you will have to add a `starter_code/.env` file and add in it the following line:
 
 ```
-PORT=3001
+PORT=3000
 ```
 
-And you have to install all the dependencies on both folders client and server:
+And you have to install all the dependencies:
 
-
-```sh
-$ cd starter_code/server  cd starter_code/client
+```bash
+$ cd starter_code
 $ npm install
 ```
 
 Now you are ready to start 🚀
 
-## Iteration 1 - Sign Up
+## Iteration #1: Setting the folders/files structure
 
-We have to create the signup of the application, that allow our users to register. The users have to provide the following information:
+In order to have everything organized, we will first create a couple of folder and files. 
+- **Routes**: In our `routes` folder, let's create separate files for our `celebrities` and `movies`. The naming is up to you, but we will use the following: `routes/celebrities-routes.js` and `routes/movies-routes.js`;
 
-- **Username**: Must be unique in our application, and will identify each user.
-- **Password**: Must be encrypted, using `bcrypt`.
+Obviously, naming is the matter of preference so we used very descriptive names for routes and views.
 
-To complete this first iteration, you have to create the database model with mongoose, the routes, and the views.
+## Iteration #2: The `celebrity` model
 
-Remember that you have to handle validation errors when a user signs up:
+Our first step is to create the `celebrity` model and add some celebrities in our database.
 
-- The fields can't be empty.
-- The username can't be repeated.
-
-## Iteration 2 - Login
-
-Once the user has signed up, he has to be able to login the application. You have to create the view and add the correct functionality in the controller to let them log in the application.
-
-Once the user has logged in, you have to create a session with `express-session` and `connect-mongo`.
-
-Again, we have to check out that the fields are correctly filled before try to authenticate him.
-
-## Iteration 3 - Protected Routes
-
-At this point, we have implemented basic authentication features. Now, we have to create some routes that are protected, meaning that users can't visit these routes unless they're authenticated.
-
-Let's create two different routes protected by authentication:
-
-- `/main` - Add a funny picture of a cat and a link back to the home page
-- `/private` - Add your favorite `gif` and an `<h1>` denoting the page as private.
-
-Create the views and add the middleware configuration to avoid accessing these routes without being authenticated.
-
-## Bonus - Frontend validations
-
-Let's add validations to our forms. Remember we have two different forms: sign up and login.
-
-Remember, when a user signs up or logs in, both the username and password fields must be filled in.
-
-Check out the [documentation](https://developer.mozilla.org/en-US/docs/Learn/HTML/Forms/Data_form_validation) at MDN. See if you can find a *constraint* that requires the user to fill a field prior to submission.
-
-## Bonus - Password Strength Measurement
-
-Finally, we will have to measure the password strength when we sign up in the application. We recommend you to use vanilla javascript.
-
-Once finished, the result should be something like this:
-
-![](https://s3-eu-west-1.amazonaws.com/ih-materials/uploads/upload_b5907d78d23d2a6757a365df56bd34b9.png)
-
-This is a very common and helpful feature for users, as many do not know anything about password strength.
+The `celebrity` model should have:
+- `name` - String (like _Tom Cruise, Beyonce, Daffy Duck,_ etc.)
+- `occupation` - String (what the celebrity does, why they are famous.  For example _actor, singer, comedian_, or you can put _unknown_ if your celebrity is someone like Kim Kardashian)
+- `catchPhrase` - String (every celebrity needs a good catch phrase.  Well maybe not all of them have one in real life, but all of _our_ celebrities will have a catch phrase.  This can be pretty much anything.)
 
 
-## Extra Resources
+### Steps we will follow in this iteration:
 
-- [HTML5 Form Validations](http://www.the-art-of-web.com/html/html5-form-validation/)
+1. Create the `celebrity.js` model file in the `models` folder.
+2. In the `celebrity.js` model file:
+    - Create the `Celebrity` model with the schema.
+    - Create the celebrity schema with `name`, `occupation` and `catchPhrase`.
+    - Export the `Celebrity` model.
+
+## Iteration #2: Adding New Celebrities
+
+Now that we have defined *celebrity* model, let's make it so the user can **add new celebrities to the database**.
+
+|     Route     | HTTP Verb |          Description          |
+|---------------|-----------|-------------------------------|
+|   `/celebrities/create`   |   POST    | Send the data from the form to this route to create the celebrity and save it to the database  |
+
+### Steps we will follow in this iteration:
+
+1. In that request file (insomnia/postman) create the JSON with the next keys:
+   - Add a key as `name`.
+   - Add a key as `occupation`.
+   - Add a key as `catchPhrase`.
+   
+2. Create the `/celebrities/create` POST route in `routes/celebrities-routes.js`.
+3. In that route we have to **create** an instance of the `Celebrity` model (don't forget, we should get all the info from the form through *req.body*)
+    - If there is an error, return `JSON` with status  `500` or `204` so the user can try again and 
+    - If there is no error, return `JSON` with status `200` and one messages that say `congratulations the celebrity was created`.
 
 
-Happy coding! :heart:
+## Iteration #3: Listing Our Celebrities
+
+Now, when we've got some celebrities in the database, we can start working with them in our Express app. Let's **get a list of all the celebrities**.
+
+Here's the route we will be using:
+
+|   Route   | HTTP Verb |   Description   |
+|-----------|-----------|-----------------|
+| `/celebrities` |    GET    | Show all celebrities |
+
+### Steps we will follow in this iteration:
+
+1. Create the `/celebrities` GET route in `routes/celebrities.js`.
+2. In the route:
+    - Use `find()` method on the `Celebrity` model to retrieve all the celebrities
+    - If everything is okay, render the `celebrities/celebrities.hbs` view and pass the array of celebrities into the view as a variable
+    - If there's an error, catch it
+3. In the `views/celebrities/celebrities.hbs` view file:
+    - Add an `<h2>` tag for the page's heading.
+    - Use a `forEach` loop to display tags with each celebrity's `name`.
+4. In the `views/index.hbs` (homepage) file:
+    - Add a link that goes to the `/celebrities` route.
+
+## Celebrities - Done! At least for now 😉
+
+## Iteration #4: The `movie` model
+
+Now when we've started all this good work, let's keep up strong and build all the routes for the *movie* model. But first, let's create the *movie* model.
+
+
+The `movie` model should have:
+- `title` - String
+- `genre` - String
+- `plot` - String
+- `cast` - Array of object IDs referencing the *celebrity* model (basically, the array of celebrities' IDs) 
+
+
+### Steps we will follow in this iteration:
+
+Go back and review what you did to create the `celebrity` model.  You'll need to create a file for the model, and in that file, you'll need to create a schema for the model as well. Don't forget, you have to export the `Movie` model.
+
+## Iteration #5: Adding New Movies
+
+Okay, the next step is to make it so the user can **add new movies to the database**.
+
+|     Route     | HTTP Verb |          Description          |
+|---------------|-----------|-------------------------------|
+| `/movies/new` |    GET    | Show a form to create a movie |
+|   `/movies/create`   |   POST    | Send the data from the form to this route to create the movie and save it to the database  |
+
+### Steps we will follow in this iteration:
+
+Review how you did this for the `celebrity` model.
+  - Create 2 new routes, one to render page with the form on it, and one to send the data to after the form is filled out
+    - In the GET route that displays the form to create a new movie (which renders the `movies/new-movie.hbs`), make sure you pass all the celebrities from your database so your users can choose which ones are in the cast of the movie you're just creating (**hint**: You will have to use [select multiple](https://www.w3schools.com/tags/att_select_multiple.asp) tag)
+  - Make sure the form is making a POST request to the other route you just created (`/movies/create`)
+  - In your post route, create an object with all the info you just received from the form. (Remember, `req.body`)
+  - Use this object to create a new movie in the database and redirect back to the page with your list of all movies
+  - Make sure to add a link to the form on the movies index page so the user can easier navigate
+
+## Iteration #6: Listing Our Movies
+
+Now that we've got some movies in the database, let's make a page where we list all our movies, just like we did with the `celebrity` model.
+
+Here's the route we will be using:
+
+|   Route   | HTTP Verb |   Description   |
+|-----------|-----------|-----------------|
+| `/movies` |    GET    | Show all movies |
+
+
+### Steps we will follow in this iteration:
+
+Go back and review how you did this for the `celebrity` model.  You'll need to:
+  - Create a GET route that will render the file in which we will display movies (`movies/movies.hbs`)
+  - Use a database query to retrieve all the movies from your database and render the view
+  - Use a `forEach` loop to display all your *movie titles* on that page
+  - Add a link to the page you just created on the home page so the user can navigate to it.
+
+
+## Iteration #7: The Movie Details Page
+
+We've got a list of all movies that displays each of their *titles*, but what if we want to see the other details? In our `movies/movies.hbs` view with our list of movies, let's add links so that the user can click on any movie's title, and go to a details page of each movie.  On this page, we will show all the details of that movie.
+Here's the route we will be using:
+
+|     Route     | HTTP Verb |      Description      |
+|---------------|-----------|-----------------------|
+| `/movies/:id` |    GET    | Show a specific movie |
+
+
+### Steps we will follow in this iteration:
+
+1. We need `/:id` part to change dynamically as we click on different movies' titles. This being said, as part of the loop that displays each movie's title, add a link that goes to the `/movies/:id` route with the `:id` replaced by the actual movie's id 🔑
+2. Create the `/movies/:id` GET route in `routes/movies-routes.js`.
+3. In the route:
+    - On the `Movie` model call `findOne()` or `findById()` method to retrieve the details of a specific movie by its `id`
+        - Don't forget you have `cast` as the array of celebrity `id`s, and we need to `populate()` in order to get the full data about the celebrities 🎯
+    - If everything is fine (*.then()*), render the `movies/movie-details` view and pass the variable with the movie's details into the view
+    - If there's an error, catch it.
+4. In the `views/movies/movie-details.hbs` view file:
+    - Add an `<h2>` for the page's heading.
+    - Display tags with the movie's `title`, `genre`, `plot` and `cast`.
+
+## Iteration #8: Deleting Movies
+
+Now that we have a list of movies, a movie details page, and a page to create new movies, we only have 2 features left to implement: *editing* celebrities and *deleting* them.  Since deleting is simpler, let's start with that.
+
+|        Route         | HTTP Verb |       Description       |
+|----------------------|-----------|-------------------------|
+| `/movies/:id/delete` |   POST    | Delete a specific movie |
+
+### Steps we will follow in this iteration:
+
+1. In the `movies/movie-details.hbs` file:
+    - Add a `<form>` tag that makes a POST request to `/movies/:id/delete` where the `:id` is replaced by the actual `id` of the movie.
+    - Add a `<button>` tag inside the form so that it can be submitted.
+2. Create the `/movies/:id/delete` POST route in your `routes/movies-routes.js` file
+3. In the route:
+    - Use the `Movie` model's `findByIdAndRemove()` method to delete the specific movie by its `id`.
+    - If everything is good (`.then()`), redirect to the list of movies page  
+    - If there's an error, catch it
+
+## Iteration #9: Editing Movies
+
+Final piece of our CRUD puzzle: **editing existing movies**.
+
+Here are the routes we will be using:
+
+|       Route        | HTTP Verb |          Description          |
+|--------------------|-----------|-------------------------------|
+| `/movies/:id/edit` |    GET    | Show a form to edit a movie |
+|   `/movies/:id`    |   POST    | Send the data from the form to this route to update the specific movie         |
+
+### Steps we will follow in this iteration:
+
+1. Create the `/celebrities/:id/edit` GET route in `routes/movies-routes.js`.
+2. In that route:
+    - Call the `Movie` model’s `findOne()` or `findById()` method to retrieve a specific movie by its *id*
+    - If everything is good, render the `movies/edit-movie` view
+    - Pass the variable with the movie's details into the view
+3. In the `movies/edit-movie.hbs` view file:
+    - Add an `<h2>` tag for the page's heading.
+    - Add a `<form>` tag that makes a POST request to `/movies/:id` with the `:id` replaced by the actual movie's *id*.
+    - Add `<input>` tags inside the form for each attribute of the movie.
+      - **Hint**: When you render the edit form, make sure each of the input fields is pre-filled with the current value of the attribute for that movie
+    - Add a `<button>` tag inside the form so that the user can submit the form once they are done editing.
+    - **BONUS**: Make the current cast members *selected* so the user knows who is in the cast currently.
+5. Create `/movies/:id` POST route in the `routes/movies-routes.js` file
+6. In that route:
+    - Create an object with movie's model keys and it's values should come from the form submission (which is `req.body`)
+    - Now you can apply different methods - `update()` or `findByIdAndUpdate()` to find the movie and send the updated values to the database.
+    - If there is no error, redirect back to the movie details page.
+
+Now you can come back to the bonus part related to the celebrity model :wink:.
+
+
+**That's it! 🏆**
+
+Happy Coding! :heart:
