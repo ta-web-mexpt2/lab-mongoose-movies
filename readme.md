@@ -56,7 +56,7 @@ $ git push origin master
 
 ### Iteration 0 | Initialize the project
 
-After forking and cloning the project, you will have to add a `starter_code/.env` file and add in it the following line:
+After forking and cloning the project, you will have to add a `starter_code/server/.env` file and add in it the following line:
 
 ```
 PORT=3000
@@ -65,7 +65,7 @@ PORT=3000
 And you have to install all the dependencies:
 
 ```bash
-$ cd starter_code
+$ cd starter_code/server
 $ npm install
 ```
 
@@ -233,7 +233,7 @@ Here are the routes we will be using:
 
 |       Route        | HTTP Verb |          Description          |
 |--------------------|-----------|-------------------------------|
-|   `/movies/:id`    |   POST    | Send the data from the form to this route to update the specific movie         |
+|   `/movies/:id`    |   patch    | Send the data from the form to this route to update the specific movie         |
 
 ### Steps we will follow in this iteration:
 
