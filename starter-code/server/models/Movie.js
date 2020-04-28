@@ -12,10 +12,10 @@ const movieSchema = new Schema({
     plot: {
         type: String
     },
-    cast: {
-        type: [Schema.Types.ObjectId],
-        ref: "Celebrity"
-    }
+    cast: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Celebrity'
+    }]
 })
 
 const Movie = mongoose.model('Movie', movieSchema);
