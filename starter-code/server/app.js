@@ -8,7 +8,6 @@ const mongoose     = require('mongoose');
 const logger       = require('morgan');
 const path         = require('path');
 
-
 mongoose
   .connect('mongodb://localhost/starter-code', {useNewUrlParser: true,useUnifiedTopology: true })
   .then(x => {
@@ -37,20 +36,17 @@ app.use(require('node-sass-middleware')({
   sourceMap: true
 }));
       
-
-
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(favicon(path.join(__dirname, 'public', 'images', 'favicon.ico')));
-
-
 
 // default value for title local
 app.locals.title = 'Express - Generated with IronGenerator';
 
-
-
 const index = require('./routes/index');
+const celebritiesRouter = require('./routes/celebritiesRoute');
+const moviesRouter = require('./routes/moviesRoute')
 app.use('/', index);
-
+app.use('/celebrities', celebritiesRouter);
+app.use('/movies', moviesRouter);
 
 module.exports = app;
