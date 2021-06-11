@@ -33,7 +33,11 @@ app.use(express.static(path.join(__dirname, 'public')));
 * Import routes
 */
 const indexRouter = require('./routes/index');
+const celebrities_router = require('./routes/celebrities-routes')
+const movies_router = require('./routes/movies-routes')
 
 app.use('/api', indexRouter);
+app.use("/api/celebrities", celebrities_router)
+app.use("/api/movies", movies_router)
 
 module.exports = app;
