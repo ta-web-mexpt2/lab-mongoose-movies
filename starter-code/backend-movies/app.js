@@ -5,10 +5,11 @@ const path = require('path');
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const mongoose = require("mongoose");
+const celebritiesRouter = require ('./routes/celebrities-routes');
+const moviesRouter = require ('./routes/movies-routes');
 
 
-mongoose
-  .connect('mongodb://localhost/backend-movies', {
+mongoose.connect('mongodb://localhost/backend-movies', {
     useCreateIndex:true,
     useNewUrlParser:true,
     useUnifiedTopology:true
@@ -35,5 +36,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 const indexRouter = require('./routes/index');
 
 app.use('/api', indexRouter);
+app.use('/api/celebrities', celebritiesRouter);
+app.use('/api/movies', moviesRouter);
 
 module.exports = app;
