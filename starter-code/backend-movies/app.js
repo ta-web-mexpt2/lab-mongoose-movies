@@ -6,6 +6,10 @@ const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const mongoose = require("mongoose");
 
+const indexRouter = require('./routes/index');
+const moviesRouter = require('./routes/moviesRouter');
+const celebritiesRouter = require("./routes/celebritiesRouter");
+
 
 mongoose
   .connect('mongodb://localhost/backend-movies', {
@@ -32,8 +36,14 @@ app.use(express.static(path.join(__dirname, 'public')));
 /*
 * Import routes
 */
-const indexRouter = require('./routes/index');
 
 app.use('/api', indexRouter);
+app.use('/api/movies', moviesRouter);
+app.use('/api/celebrities',celebritiesRouter);
+
+
+
+
+
 
 module.exports = app;
