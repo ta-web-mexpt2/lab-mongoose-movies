@@ -24,4 +24,4 @@ const moviesSchema = new Schema({
     }
 },{timestamps:true});
 
-module.exports = model("Celebrities",moviesSchema)
+module.exports = model("Movies",moviesSchema)
